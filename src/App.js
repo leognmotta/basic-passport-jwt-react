@@ -5,6 +5,10 @@ import Home from './pages/Home/Home';
 import Login from './pages/Login/Login';
 
 class App extends Component {
+  state = {
+    islogged: false
+  };
+
   render() {
     return (
       <BrowserRouter>
