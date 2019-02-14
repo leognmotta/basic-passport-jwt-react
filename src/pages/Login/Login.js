@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import api from '../../services/api';
 
 class Login extends Component {
@@ -16,14 +17,17 @@ class Login extends Component {
   loginSubmitHandler = async event => {
     event.preventDefault();
 
-    const login = await api.post('/auth/login', {
-      email: this.state.email,
-      password: this.state.password
-    });
-
-    console.log(login);
-
-    localStorage.setItem('jwt:', login.data.token);
+    try {
+      const login = await api.post('/auth/login', {
+        email: this.state.email,
+        password: this.state.password
+      });
+      localStorage.setItem('jwt:', login.data.token);
+      console.log(login.data);
+      this.props.history.push('/protected');
+    } catch (error) {
+      console.log(error.data);
+    }
   };
 
   render() {
@@ -51,4 +55,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default withRouter(Login);
