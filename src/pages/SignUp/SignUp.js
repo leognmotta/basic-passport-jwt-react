@@ -1,30 +1,30 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
+import api from '../../services/api';
 
 import Logo from '../../assets/airbnb-logo.svg';
-import api from '../../services/api';
-import { login } from '../../services/auth';
 
 import { Form, Container } from './styles';
 
-class SignIn extends Component {
+class SignUp extends Component {
   state = {
+    name: '',
     email: '',
     password: '',
     error: ''
   };
 
-  loginSubmitHandler = async event => {
+  signUpSubmitHandler = async event => {
     event.preventDefault();
-    const { email, password } = this.state;
-    if (!email || !password) {
+
+    const { name, email, password } = this.state;
+
+    if (!name || !email || !password) {
       this.setState({ error: 'Please fill all fields!' });
     } else {
       try {
-        const response = await api.post('/auth/login', { email, password });
-        console.log(response.data.token);
-        login(response.data.token);
-        this.props.history.push('/');
+        await api.post('/auth/signup', { name, email, password });
+        this.props.history.push('/login');
       } catch (error) {
         const errorMessage = error.response.data.message;
         this.setState({ error: errorMessage });
@@ -39,30 +39,34 @@ class SignIn extends Component {
   render() {
     return (
       <Container>
-        <Form onSubmit={this.loginSubmitHandler}>
+        <Form onSubmit={this.signUpSubmitHandler}>
           <img src={Logo} alt="Airbnb logo" />
           {this.state.error && <p>{this.state.error}</p>}
           <input
+            type="text"
+            placeholder="Name"
+            name="name"
+            onChange={this.inputChangedHandler}
+          />
+          <input
             type="email"
+            placeholder="Email"
             name="email"
-            value={this.state.email}
-            placeholder="Endereço de e-mail"
             onChange={this.inputChangedHandler}
           />
           <input
             type="password"
-            name="password"
-            value={this.state.password}
             placeholder="Password"
+            name="password"
             onChange={this.inputChangedHandler}
           />
-          <button type="submit">Login</button>
+          <button type="submit">Sign Up</button>
           <hr />
-          <Link to="/signup">Go to Sign Up</Link>
+          <Link to="/login">Go to login</Link>
         </Form>
       </Container>
     );
   }
 }
 
-export default withRouter(SignIn);
+export default withRouter(SignUp);
