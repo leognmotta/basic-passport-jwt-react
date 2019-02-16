@@ -13,7 +13,7 @@ class App extends Component {
 
   fetchData = async () => {
     try {
-      const user = await api.get('/auth/getuser');
+      const user = await api.get('/auth/is-token-valid');
       this.setState({ username: user.data.user.name });
     } catch (error) {
       logout();

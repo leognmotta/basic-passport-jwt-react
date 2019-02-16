@@ -21,7 +21,7 @@ class SignIn extends Component {
       this.setState({ error: 'Please fill all fields!' });
     } else {
       try {
-        const response = await api.post('/auth/login', { email, password });
+        const response = await api.post('/auth/signin', { email, password });
         console.log(response.data.token);
         login(response.data.token);
         this.props.history.push('/');
